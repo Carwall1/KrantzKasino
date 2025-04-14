@@ -4,7 +4,7 @@
 set -e
 
 echo "Creating python virtual env"
-python -m venv krantz
+python3 -m venv krantz
 source krantz/bin/activate
 
 echo "installing dependencies from requirements.txt"
