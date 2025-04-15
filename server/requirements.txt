@@ -2,3 +2,4 @@ django
 djangorestframework
 drf-yasg
 django-cors-headers>=3.11.0
+djangorestframework-simplejwt

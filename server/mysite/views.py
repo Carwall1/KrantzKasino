@@ -8,6 +8,8 @@ from .models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework_simplejwt.tokens import RefreshToken
+
 
 
 @api_view(['GET'])
@@ -48,7 +50,12 @@ def login(request):
         user = authenticate(username=username, password=password)
         
         if user:
-            return Response({'message': 'Login successful', 'username': user.username}, status=status.HTTP_200_OK)
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'access': str(refresh.access_token),
+                'refresh': str(refresh),
+                'username': user.username
+            }, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
