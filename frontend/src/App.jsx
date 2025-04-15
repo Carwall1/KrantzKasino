@@ -1,17 +1,13 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import React from 'react';
+import AppRouter from './routes/AppRouter';
+import { AuthProvider } from './context/AuthProvider';
 
 function App() {
-  const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    axios
-      .get("/api/hello/")
-      .then((res) => setMessage(res.data.message))
-      .catch((err) => console.error(err));
-  }, []);
-
-  return <h1>{message || "Loading..."}</h1>;
+  return (
+    <AuthProvider>
+      <AppRouter />
+    </AuthProvider>
+  );
 }
 
 export default App;
