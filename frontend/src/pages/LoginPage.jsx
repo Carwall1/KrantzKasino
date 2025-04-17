@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../api/auth';
 import { useAuth } from '../context/AuthProvider';
+import { Box } from '@chakra-ui/react';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ const LoginPage = () => {
   });
 
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // To handle loading state
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -24,6 +26,14 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
+
+    // Simple validation for empty fields
+    if (!formData.username || !formData.password) {
+      setError('Please enter both username and password');
+      setLoading(false);
+      return;
+    }
 
     try {
       const res = await loginUser(formData);
@@ -33,56 +43,20 @@ const LoginPage = () => {
       navigate('/dashboard'); // or wherever you want to go after login
     } catch (err) {
       console.error(err);
-      setError('Invalid credentials');
+      setError(err.response?.data?.message || 'Invalid credentials');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-lg shadow-md w-full max-w-sm"
-      >
-        <h2 className="text-xl font-bold mb-4">Login</h2>
-
-        {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
-
-        <div className="mb-4">
-          <label htmlFor="username" className="block text-sm font-medium">
-            Username
-          </label>
-          <input
-            type="text"
-            name="username"
-            className="mt-1 w-full border px-3 py-2 rounded-md"
-            value={formData.username}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="password" className="block text-sm font-medium">
-            Password
-          </label>
-          <input
-            type="password"
-            name="password"
-            className="mt-1 w-full border px-3 py-2 rounded-md"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
-        >
-          Login
-        </button>
-      </form>
-    </div>
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      height="100vh"
+      backgroundColor="gray.100"
+    ></Box>
   );
 };
 
