@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../api/auth';
 import { useAuth } from '../context/AuthProvider';
-import { Box } from '@chakra-ui/react';
+import { Input, Button, FormControl, FormLabel, FormErrorMessage, Box } from '@chakra-ui/react';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -56,7 +56,46 @@ const LoginPage = () => {
       alignItems="center"
       height="100vh"
       backgroundColor="gray.100"
-    ></Box>
+    >
+      <Box
+        as="form"
+        onSubmit={handleSubmit}
+        padding="6"
+        borderRadius="md"
+        backgroundColor="white"
+        boxShadow="lg"
+        width="100%"
+        maxWidth="400px"
+      >
+        <FormControl isInvalid={error}>
+          <FormLabel htmlFor="email">Email</FormLabel>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="Enter your email"
+            value={formData.email}
+            onChange={handleChange}
+            marginBottom="4"
+          />
+          <FormLabel htmlFor="password">Password</FormLabel>
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            placeholder="Enter your password"
+            value={formData.password}
+            onChange={handleChange}
+            marginBottom="4"
+          />
+          {error && <FormErrorMessage>{error}</FormErrorMessage>}
+
+          <Button type="submit" colorScheme="blue" width="full">
+            Login
+          </Button>
+        </FormControl>
+      </Box>
+    </Box>
   );
 };
 
